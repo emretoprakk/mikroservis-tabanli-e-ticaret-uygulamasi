@@ -1,0 +1,128 @@
+﻿@model GetCargoCustomerByIdDto
+@{
+    ViewData["Title"] = "UserAddressInfo";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<style type="text/css">
+    @@media (max-width: 768px) {
+        .info-card {
+            padding: 1rem;
+            margin: 1rem;
+        }
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin: 2rem;
+    }
+
+        .info-card h3 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+            font-weight: 600;
+        }
+
+    .info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .info-item {
+        padding: 1.2rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .info-item:hover {
+            transform: translateX(5px);
+        }
+
+    .info-label {
+        font-weight: 600;
+        color: #444;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        font-size: 1.4rem;
+        color: #2c3e50;
+        font-weight: normal; /* Font weight normal yapıldı */
+    }
+
+    /* Yeni renk sınıfları */
+    .lavender-bg {
+        background-color: #f3e5f5;
+        border-left: 5px solid #9c27b0;
+    }
+
+    .mint-bg {
+        background-color: #e0f2f1;
+        border-left: 5px solid #009688;
+    }
+
+    .coral-bg {
+        background-color: #fce4ec;
+        border-left: 5px solid #e91e63;
+    }
+
+    .sage-bg {
+        background-color: #f1f8e9;
+        border-left: 5px solid #689f38;
+    }
+
+    .peach-bg {
+        background-color: #fff3e0;
+        border-left: 5px solid #ff5722;
+    }
+
+    .sky-bg {
+        background-color: #e3f2fd;
+        border-left: 5px solid #1976d2;
+    }
+</style>
+
+<section class="content container-fluid">
+    <div class="info-card">
+        <h3>Kullanıcı Adres Ve İletişim Bilgileri</h3>
+        <div class="info-row">
+            <div class="info-item lavender-bg">
+                <div class="info-label">Kullanıcı ID</div>
+                <div class="info-value">@Model.cargoCustomerId</div>
+            </div>
+
+            <div class="info-item mint-bg">
+                <div class="info-label">Ad Soyad</div>
+                <div class="info-value">@Model.name @Model.surname</div>
+            </div>
+
+            <div class="info-item coral-bg">
+                <div class="info-label">Email</div>
+                <div class="info-value">@Model.email</div>
+            </div>
+
+            <div class="info-item sage-bg">
+                <div class="info-label">Telefon</div>
+                <div class="info-value">@Model.phone</div>
+            </div>
+
+            <div class="info-item peach-bg">
+                <div class="info-label">İlçe-Şehir</div>
+                <div class="info-value">@Model.district @Model.city</div>
+            </div>
+
+            <div class="info-item sky-bg">
+                <div class="info-label">Adres</div>
+                <div class="info-value">@Model.address</div>
+            </div>
+        </div>
+    </div>
+</section>

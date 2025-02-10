@@ -1,0 +1,24 @@
+# wwwroot içinde yalnızca spica temasını hariç tut
+wwwroot/spica/
+
+# Derleme ve geçici dosyalar
+bin/
+obj/
+out/
+*.cache
+*.log
+*.tmp
+*.bak
+
+# IDE ve editör konfigürasyon dosyaları
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.DS_Store
+Thumbs.db
+*.ldb
+
+# Gizli JSON dosyaları hariç tut
+Services/Images/MultiShop.Images.WebUI/wwwroot/*.json

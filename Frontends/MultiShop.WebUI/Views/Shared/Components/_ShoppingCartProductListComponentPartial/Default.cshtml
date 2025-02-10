@@ -1,0 +1,315 @@
+﻿@model List<BasketItemDto>
+
+<div class="col-lg-8 table-responsive mb-5">
+    <table class="table table-light table-borderless table-hover text-center mb-0">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ürün</th>
+                <th>Fiyat</th>
+                <th>Miktar</th>
+                <th>Toplam</th>
+                <th>Kaldır</th>
+            </tr>
+        </thead>
+        <tbody class="align-middle">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle"><img src="@item.ProductImageUrl" alt="" style="width: 50px;"> @item.ProductName</td>
+                    <td class="align-middle">@item.Price ₺</td>
+                    <td class="align-middle">
+                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-minus" data-product-id="@item.ProductId">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center"
+                                   value="@item.Quantity" readonly>
+                            <div class="input-group-btn">
+                                <button class="btn btn-sm btn-primary btn-plus" data-product-id="@item.ProductId">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="align-middle total-price">@(@item.Price * @item.Quantity) ₺</td>
+                    <td class="align-middle">
+                        <a href="/ShoppingCart/RemoveBasketItem/@item.ProductId" class="btn btn-sm btn-danger">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toast container oluşturma ve ekleme
+        const toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        `;
+        document.body.appendChild(toastContainer);
+
+        // Toast gösterme fonksiyonu
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                min-width: 300px;
+                margin-bottom: 10px;
+                padding: 15px 20px;
+                border-radius: 4px;
+                font-size: 14px;
+                transition: 0.3s;
+                pointer-events: auto;
+                color: white;
+                opacity: 0;
+                transform: translateY(-10px);
+            `;
+
+            const styles = {
+                success: {
+                    background: '#28a745',
+                    borderLeft: '5px solid #1e7e34'
+                },
+                error: {
+                    background: '#dc3545',
+                    borderLeft: '5px solid #bd2130'
+                }
+            };
+
+            Object.assign(toast.style, styles[type]);
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 100);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    toastContainer.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Sayfa yüklenirken kupon bilgilerini kontrol et
+        const savedDiscountRate = localStorage.getItem('discountRate');
+        const savedCouponCode = localStorage.getItem('couponCode');
+        if (savedDiscountRate && savedCouponCode) {
+            applySavedDiscount(savedDiscountRate, savedCouponCode);
+        }
+
+        // Kupon kaldırma butonu oluşturma ve ekleme
+        const appliedCouponElement = document.querySelector('.applied-coupon-code');
+        if (appliedCouponElement) {
+            const removeCouponButton = document.createElement('button');
+            removeCouponButton.className = 'btn btn-sm btn-danger ml-2';
+            removeCouponButton.innerHTML = '<i class="fa fa-times"></i> Kuponu Kaldır';
+            removeCouponButton.style.display = 'none';
+            appliedCouponElement.parentNode.insertBefore(removeCouponButton, appliedCouponElement.nextSibling);
+
+            // Kupon kaldırma butonu görünürlüğünü güncelleme
+            function updateRemoveButtonVisibility() {
+                const couponCode = localStorage.getItem('couponCode');
+                removeCouponButton.style.display = couponCode ? 'inline-block' : 'none';
+            }
+
+            // İlk görünürlük kontrolü
+            updateRemoveButtonVisibility();
+
+            // Kupon kaldırma butonuna tıklama işlemi
+            removeCouponButton.addEventListener('click', function () {
+                fetch('/Discount/RemoveDiscountCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            localStorage.removeItem('discountRate');
+                            localStorage.removeItem('couponCode');
+                            updateDiscountDisplay(0, '');
+                            recalculatePrices(0);
+                            updateRemoveButtonVisibility();
+                            appliedCouponElement.textContent = '';
+                            showToast('Kupon başarıyla kaldırıldı!', 'success');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Hata:', error);
+                        showToast('Kupon kaldırılırken bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                    });
+            });
+        }
+
+        // Kupon formu işleme
+        const couponForm = document.querySelector('form[action="/Discount/ConfirmDiscountCoupon"]');
+        if (couponForm) {
+            couponForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const code = couponForm.querySelector('input[name="code"]').value;
+
+                fetch('/Discount/ConfirmDiscountCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `code=${encodeURIComponent(code)}`
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // İndirim oranını ve kupon kodunu kaydet
+                            localStorage.setItem('discountRate', data.discountRate);
+                            localStorage.setItem('couponCode', code);
+                            // İndirim oranını güncelle
+                            updateDiscountDisplay(data.discountRate, code);
+                            // Fiyatları yeniden hesapla
+                            recalculatePrices(data.discountRate);
+                            // Kupon kaldırma butonunu göster
+                            updateRemoveButtonVisibility();
+                            showToast('Kupon başarıyla uygulandı!', 'success');
+                        } else {
+                            showToast('Geçersiz kupon kodu!', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Hata:', error);
+                        showToast('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                    });
+            });
+        }
+
+        function applySavedDiscount(discountRate, couponCode) {
+            updateDiscountDisplay(discountRate, couponCode);
+            recalculatePrices(discountRate);
+        }
+
+        function updateDiscountDisplay(discountRate, couponCode) {
+            const discountRateElement = document.querySelector('.discount-rate');
+            const couponCodeElement = document.querySelector('.applied-coupon-code');
+            if (discountRateElement) {
+                discountRateElement.textContent = discountRate > 0 ? `% ${discountRate}` : '---';
+            }
+            if (couponCodeElement) {
+                couponCodeElement.textContent = couponCode ? `Uygulanan Kupon: ${couponCode}` : '';
+            }
+            // Kupon kaldırma butonu görünürlüğünü güncelle
+            if (typeof updateRemoveButtonVisibility === 'function') {
+                updateRemoveButtonVisibility();
+            }
+        }
+
+        function recalculatePrices(discountRate) {
+            const rows = document.querySelectorAll('tbody tr');
+            let subtotal = 0;
+
+            rows.forEach(row => {
+                const price = parseFloat(
+                    row.querySelector('.align-middle:nth-child(2)').textContent.replace('₺', '').trim()
+                );
+                const quantity = parseInt(
+                    row.querySelector('input').value
+                );
+                const rowTotal = price * quantity;
+                subtotal += rowTotal;
+
+                row.querySelector('.total-price').textContent = rowTotal.toFixed(2) + ' ₺';
+            });
+
+            const taxRate = 10; // KDV oranı %10
+            const taxAmount = (subtotal * taxRate) / 100;
+            const discountAmount = (subtotal * discountRate) / 100;
+            const totalWithDiscount = subtotal - discountAmount + taxAmount;
+
+            // Sipariş özeti güncelle
+            document.querySelector('.subtotal').textContent = subtotal.toFixed(2) + ' ₺';
+            document.querySelector('.tax').textContent = taxAmount.toFixed(2) + ' ₺';
+            document.querySelector('.total-with-discount').textContent = totalWithDiscount.toFixed(2) + ' ₺';
+            document.querySelector('.total').textContent = totalWithDiscount.toFixed(2) + ' ₺';
+        }
+
+        function updateCartSummary(data) {
+            if (data.success) {
+                const discountRate = parseFloat(localStorage.getItem('discountRate')) || 0;
+                recalculatePrices(discountRate);
+            } else {
+                console.error(data.message || 'Sipariş özeti güncellenemedi.');
+            }
+        }
+
+        function attachButtonListeners() {
+            const plusButtons = document.querySelectorAll('.btn-plus');
+            const minusButtons = document.querySelectorAll('.btn-minus');
+
+            plusButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', function () {
+                    updateQuantity(newButton, true);
+                });
+            });
+
+            minusButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', function () {
+                    updateQuantity(newButton, false);
+                });
+            });
+        }
+
+        function updateQuantity(button, isIncrement) {
+            const productId = button.dataset.productId;
+            const quantityInput = button.closest('tr').querySelector('input');
+            let newQuantity = parseInt(quantityInput.value) + (isIncrement ? 1 : -1);
+
+            if (newQuantity < 1) newQuantity = 1;
+
+            fetch('/ShoppingCart/UpdateBasketQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId: productId, quantity: newQuantity }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        quantityInput.value = newQuantity;
+                        const price = parseFloat(
+                            button.closest('tr')
+                                .querySelector('.align-middle:nth-child(2)')
+                                .textContent.replace('₺', '')
+                                .trim()
+                        );
+                        button.closest('tr').querySelector('.total-price').textContent =
+                            (price * newQuantity).toFixed(2) + ' ₺';
+                        updateCartSummary(data);
+                    } else {
+                        console.error(data.message || 'Ürün miktarı güncellenemedi.');
+                    }
+                })
+                .catch(error => console.error('Sunucu hatası:', error));
+        }
+
+        attachButtonListeners();
+    });
+</script>

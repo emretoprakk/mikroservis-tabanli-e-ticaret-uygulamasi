@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<style>
+    .status-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        background-color: #f8f9fa;
+    }
+
+    .status-card {
+        background: #ffffff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 20px 30px;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .status-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        background-color: #e9ecef;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+        .status-item span {
+            font-weight: 700;
+            color: #007bff;
+        }
+</style>
+<div class="status-container">
+    <div class="status-card">
+        <div class="status-title">Gerçek Zamanlı Yorum Takibi</div>
+        <div class="status-item">
+            <span>Bağlantı Durumu:</span>
+            <span id="connstatus">Bağlanıyor...</span>
+        </div>
+        <div class="status-item">
+            <span>Yorum Sayısı:</span>
+            <span style="color: seagreen" id="commentcount">0</span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(() => {
+        var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7080/SignalRHub").build();
+
+        connection.start().then(() => {
+            $("#connstatus").text("Bağlandı").css("color", "#28a745");
+            connection.invoke("SendStatisticCount");
+        }).catch((err) => {
+            $("#connstatus").text("Bağlantı Başarısız").css("color", "#dc3545");
+            console.error(err);
+        });
+
+        connection.on("ReceiveCommentCount", (getTotalCommentCount) => {
+            $("#commentcount").text(getTotalCommentCount);
+        });
+    });
+</script>

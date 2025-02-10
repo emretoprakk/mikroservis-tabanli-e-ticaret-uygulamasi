@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+<head>
+    <!-- Tailwind ve Lucide Icons CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-slate-800">Güncel Döviz Kurları</h1>
+            <p class="text-slate-600">@DateTime.Now.ToString("dd MMMM yyyy, HH:mm")</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Dolar Kartı -->
+            <div class="bg-white/90 backdrop-blur rounded-xl shadow-lg overflow-hidden">
+                <div class="bg-emerald-500 p-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="dollar-sign" class="w-8 h-8 text-white"></i>
+                        <h2 class="text-2xl font-bold text-white">USD/TRY</h2>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="arrow-down-right" class="w-5 h-5 text-emerald-500"></i>
+                                <span class="text-slate-600">Alış</span>
+                            </div>
+                            <span class="text-2xl font-bold text-slate-800">₺@ViewBag.exchangeRateUsd</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-emerald-500"></i>
+                                <span class="text-slate-600">Satış</span>
+                            </div>
+                            <span class="text-2xl font-bold text-slate-800">₺@ViewBag.previous_closeUsd</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Euro Kartı -->
+            <div class="bg-white/90 backdrop-blur rounded-xl shadow-lg overflow-hidden">
+                <div class="bg-blue-500 p-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="euro" class="w-8 h-8 text-white"></i>
+                        <h2 class="text-2xl font-bold text-white">EUR/TRY</h2>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="arrow-down-right" class="w-5 h-5 text-blue-500"></i>
+                                <span class="text-slate-600">Alış</span>
+                            </div>
+                            <span class="text-2xl font-bold text-slate-800">₺@ViewBag.exchangeRateEur</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-blue-500"></i>
+                                <span class="text-slate-600">Satış</span>
+                            </div>
+                            <span class="text-2xl font-bold text-slate-800">₺@ViewBag.previous_closeEur</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bilgi Kartı -->
+            <div class="md:col-span-2 bg-white/90 backdrop-blur rounded-xl shadow-lg p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="info" class="w-6 h-6 text-slate-400"></i>
+                    <p class="text-sm text-slate-600">
+                        Veriler anlık olarak güncellenmektedir. Son güncelleme: @DateTime.Now.ToString("HH:mm:ss")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Lucide ikonlarını başlat
+    lucide.createIcons();
+</script>

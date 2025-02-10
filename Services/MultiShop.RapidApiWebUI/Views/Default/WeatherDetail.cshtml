@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+<head>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<div class="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-8 text-blue-900">
+            Konya Hava Durumu
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Sıcaklık Kartı -->
+            <div class="bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="thermometer" class="w-6 h-6 text-red-500"></i>
+                    <h2 class="text-xl font-semibold">Sıcaklık</h2>
+                </div>
+                <div class="text-6xl font-bold text-center text-blue-900">
+                    @ViewBag.cityTemp°C
+                </div>
+            </div>
+            <!-- Hava Durumu Detayları Kartı -->
+            <div class="bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="wind" class="w-6 h-6 text-blue-500"></i>
+                    <h2 class="text-xl font-semibold">Hava Durumu Detayları</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="cloud-sun" class="w-5 h-5 text-yellow-500"></i>
+                        <span>Parçalı Bulutlu</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="wind" class="w-5 h-5 text-blue-400"></i>
+                        <span>Rüzgar: 12 km/s</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="cloud-rain" class="w-5 h-5 text-gray-500"></i>
+                        <span>Yağış İhtimali: %10</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 5 Günlük Tahmin Kartı -->
+            <div class="md:col-span-2 bg-white/90 backdrop-blur rounded-lg shadow-lg p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="calendar" class="w-6 h-6 text-gray-500"></i>
+                    <h2 class="text-xl font-semibold">5 Günlük Tahmin</h2>
+                </div>
+                <div class="grid grid-cols-5 gap-4 text-center">
+                    @{
+                        string[] days = { "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma" };
+                        string[] icons = { "cloud-sun", "cloud-sun", "cloud", "cloud", "sun" };
+                        string[] descriptions = { "Parçalı Bulutlu", "Parçalı Bulutlu", "Çok Bulutlu", "Çok Bulutlu", "Güneşli" };
+
+                        for (int i = 0; i < days.Length; i++)
+                        {
+                            <div class="space-y-2">
+                                <div class="font-medium">@days[i]</div>
+                                <i data-lucide="@icons[i]" class="w-8 h-8 mx-auto @(icons[i] == "sun" ? "text-yellow-500" : "text-gray-500")"></i>
+                                <div class="font-bold">@(Convert.ToInt32(ViewBag.cityTemp) + new Random().Next(3, 7))°C</div>
+                                <div class="text-sm text-gray-600">@descriptions[i]</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Lucide ikonlarını başlat
+    lucide.createIcons();
+</script>

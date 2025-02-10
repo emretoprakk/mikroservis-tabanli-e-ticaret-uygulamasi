@@ -1,0 +1,172 @@
+﻿@model CreateCommentDto
+
+<!-- Font Awesome için -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="col-md-6">
+    <h4 class="mb-4">Bir Yorum bırakın</h4>
+    <small>E-posta adresiniz yayınlanmayacaktır. Geçerli bir email adresi giriniz.*</small>
+    <div class="d-flex my-3">
+        <p class="mb-0 mr-2">Ürün puanınız * :</p>
+        <div class="text-primary rating-stars">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <i class="far fa-star rating-star" data-rating="@i"></i>
+            }
+        </div>
+    </div>
+    <form id="commentForm">
+        <input type="hidden" id="productId" value="@Model.ProductId" />
+        <input type="hidden" id="rating" value="1" />
+        <div class="form-group">
+            <label for="fullName">Ad ve Soyad *</label>
+            <input type="text" class="form-control" id="fullName" name="FullName" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Adresiniz *</label>
+            <input type="email" class="form-control" id="email" name="Email" required>
+        </div>
+        <div class="form-group">
+            <label for="commentDetail">Yorumunuz *</label>
+            <textarea id="commentDetail" cols="30" rows="5" class="form-control" name="CommentDetail" required></textarea>
+        </div>
+        <div class="form-group mb-0">
+            <button type="submit" class="btn btn-primary px-3">Yorum Yap</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .rating-stars {
+        cursor: pointer;
+    }
+
+    .rating-star {
+        padding: 0 2px;
+    }
+
+        .rating-star:hover {
+            color: #ffc107;
+        }
+</style>
+
+<script>
+    $(document).ready(function () {
+        // Yıldız derecelendirme sistemi
+        $('.rating-star').on('click', function () {
+            const rating = $(this).data('rating');
+            $('#rating').val(rating);
+            updateStars(rating);
+        });
+
+        // Mouse over efekti
+        $('.rating-star').on('mouseover', function () {
+            const rating = $(this).data('rating');
+            updateStars(rating);
+        });
+
+        // Mouse out efekti
+        $('.rating-stars').on('mouseleave', function () {
+            const currentRating = $('#rating').val();
+            updateStars(currentRating);
+        });
+
+        function updateStars(rating) {
+            $('.rating-star').removeClass('fas').addClass('far');
+            $('.rating-star').each(function () {
+                if ($(this).data('rating') <= rating) {
+                    $(this).removeClass('far').addClass('fas');
+                }
+            });
+        }
+
+        // Yorum ekleme fonksiyonu
+        function appendNewComment(comment) {
+            const stars = Array(5).fill('').map((_, index) =>
+                `<i class="${index < comment.rating ? 'fas' : 'far'} fa-star"></i>`
+            ).join('');
+
+            const commentHtml = `
+                <div class="media mb-4">
+                    <img src="${comment.imageUrl || '/images/default-avatar.jpg'}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                    <div class="media-body">
+                        <h6>${comment.fullName}<small> - <i>${new Date().toLocaleDateString('tr-TR')}</i></small></h6>
+                        <div class="text-primary mb-2">${stars}</div>
+                        <p>${comment.commentDetail}</p>
+                    </div>
+                </div>
+            `;
+
+            const commentsContainer = $('#tab-pane-3 .col-md-6:first');
+            commentsContainer.find('h4').after(commentHtml);
+
+            // Başlıktan sonra yeni yorumu ekle
+            if (header.length) {
+                header.after(commentHtml);
+            } else {
+                commentsContainer.prepend(`<h4 class="mb-4">Bu ürün için 1 yorum bulunmaktadır.</h4>${commentHtml}`);
+            }
+
+            const commentCount = commentsContainer.find('.media').length;
+            commentsContainer.find('h4').text(`Bu ürün için ${commentCount} yorum bulunmaktadır.`);
+        }
+
+        // Form gönderimi
+        $('#commentForm').submit(function (e) {
+            e.preventDefault();
+
+            const comment = {
+                fullName: $('#fullName').val().trim(),
+                email: $('#email').val().trim(),
+                commentDetail: $('#commentDetail').val().trim(),
+                rating: parseInt($('#rating').val()),
+                productId: $('#productId').val(),
+                status: true,
+                createdDate: new Date().toISOString()
+            };
+
+            if (!comment.fullName || !comment.email || !comment.commentDetail) {
+                alert('Lütfen tüm alanları doldurun');
+                return;
+            }
+
+            $.ajax({
+                url: '/ProductList/AddComment',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(comment),
+                success: function (response) {
+                    if (response.success) {
+                        appendNewComment(comment);
+                        $('#commentForm')[0].reset();
+                        updateStars(1);
+                        $('#rating').val(1);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Yorum eklenirken hata:', error);
+                    alert('Yorum eklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+                }
+            });
+        });
+
+        // Sayfa yüklendiğinde yorumları yükle
+        const productId = $('#productId').val();
+        if (productId) {
+            $.ajax({
+                url: `/ProductList/GetProductComments/${productId}`,
+                type: 'GET',
+                success: function (data) {
+                    if (data) {
+                        $('#tab-pane-3').html(data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Yorumlar yüklenirken hata:', error);
+                }
+            });
+        }
+    });
+</script>

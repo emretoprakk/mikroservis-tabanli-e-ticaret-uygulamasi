@@ -1,0 +1,52 @@
+﻿@model List<ResultInboxMessageDto>
+
+@{
+    ViewData["Title"] = "Inbox";
+    Layout = "~/Areas/User/Views/UserLayout/Index.cshtml";
+    int count = 0;
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center" style="font-size: 1.3rem; font-weight: bold;">Gelen Mesaj Listesi</h4>
+                        <div class="table-responsive pt-3">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="font-weight: bold;">#</th>
+                                        <th style="font-weight: bold;">Gönderen</th>
+                                        <th style="font-weight: bold;">Konu</th>
+                                        <th style="font-weight: bold;">Tarih</th>
+                                        <th style="font-weight: bold;">Durum</th>
+                                        <th style="font-weight: bold;">Sil</th>
+                                        <th style="font-weight: bold;">Mesajı Aç</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        count++;
+                                        <tr>
+                                            <th style="font-family: 'Arial', sans-serif; font-size: 0.9rem; color: #333;">@count</th>
+                                            <td style="font-family: 'Arial', sans-serif; font-size: 0.9rem; color: #333;">@item.SenderId</td>
+                                            <td style="font-family: 'Arial', sans-serif; font-size: 0.9rem; color: #333;">@item.Subject</td>
+                                            <td style="font-family: 'Arial', sans-serif; font-size: 0.9rem; color: #333;">@(((DateTime)item.MessageDate).ToString("dd-MMM-yyyy"))</td>
+                                            <td style="font-family: 'Arial', sans-serif; font-size: 0.9rem; color: #333;">@item.IsRead</td>
+                                            <td><a href="#" class="btn btn-md btn-danger">Sil</a></td>
+                                            <td><a href="#" class="btn btn-md btn-info">Mesajı Aç</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

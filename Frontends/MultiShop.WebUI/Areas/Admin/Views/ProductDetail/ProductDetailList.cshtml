@@ -1,0 +1,45 @@
+﻿@model List<ResultProductDetailDto>
+
+@{
+    ViewData["Title"] = "ProductDetailList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="bs-example" data-example-id="bordered-table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Ürün ID</th>
+                                <th>Ürün Açıklaması</th>
+                                <th>Ürün Bilgisi</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.ProductId</td>
+                                    <td>@item.ProductDescription</td>
+                                    <td>@item.ProductInfo</td>
+                                    <td>
+                                        <a href="/Admin/ProductDetail/UpdateProductDetail/@item.ProductDetailId" class="btn btn-success">Güncelle</a>
+                                        <a href="/Admin/ProductDetail/DeleteProductDetail/@item.ProductDetailId" class="btn btn-danger" onclick="return confirm('Bu ürünü silmek istediğinize emin misiniz?');">Sil</a>
+                                    </td>   
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="mb-3">
+                        <a href="/Admin/ProductDetail/CreateProductDetail" class="btn btn-primary">Ürün Ekle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>  
+

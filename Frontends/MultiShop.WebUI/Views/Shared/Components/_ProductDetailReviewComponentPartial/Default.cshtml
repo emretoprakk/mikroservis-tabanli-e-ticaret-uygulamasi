@@ -1,0 +1,44 @@
+﻿@model List<ResultCommentDto>
+
+@{
+    var sortedComments = Model?.OrderByDescending(x => x.CreatedDate).ToList(); // En yeni yorumlar en üstte
+}
+
+<div class="tab-pane" id="tab-pane-3">
+    <div class="row">
+        <div class="col-md-6">
+            @if (sortedComments != null && sortedComments.Any())
+            {
+                <h4 class="mb-4">Bu ürün için @sortedComments.Count yorum bulunmaktadır.</h4>
+                @foreach (var item in sortedComments)
+                {
+                    <div class="media mb-4">
+                        <img src="@item.ImageUrl" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                        <div class="media-body">
+                            <h6>@item.FullName<small> - <i>@item.CreatedDate.ToString("dd.MM.yyyy")</i></small></h6>
+                            <div class="text-primary mb-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= item.Rating)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star"></i>
+                                    }
+                                }
+                            </div>
+                            <p>@item.CommentDetail</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h4 class="mb-4">Henüz yorum bulunmamaktadır.</h4>
+            }
+        </div>
+        @await Html.PartialAsync("~/Views/ProductList/AddComment.cshtml", new CreateCommentDto { ProductId = ViewBag.x })
+    </div>
+</div>

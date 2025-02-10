@@ -1,0 +1,33 @@
+﻿@model CreateProductDetailDto
+
+@{
+    ViewData["Title"] = "CreateProductDetail";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="bs-example" data-example-id="bordered-table">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="ProductId" class="form-label">Ürün ID</label>
+                            <input type="text" class="form-control" asp-for="ProductId" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ProductDescription" class="form-label">Ürün Açıklaması</label>
+                            <textarea class="form-control" asp-for="ProductDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ProductInfo" class="form-label">Ürün Bilgisi</label>
+                            <textarea class="form-control" asp-for="ProductInfo" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Sipariş Tamamlandı";
+    Layout = "~/Views/UILayout/_UILayout.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="css/fontawesome.min.css" rel="stylesheet">
+<link href="css/all.min.css" rel="stylesheet">
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <!-- Başarı Simgesi -->
+            <i class="fa fa-check-circle text-success" style="font-size: 4rem; margin-bottom: 20px;"></i>
+
+            <!-- Başarı Mesajı -->
+            <h2 class="mb-3">Siparişiniz başarıyla tamamlandı!</h2>
+            <p class="mb-4">Teşekkür ederiz. Sipariş detaylarınız e-posta adresinize gönderilecektir.</p>
+
+            <!-- Sipariş Detayı -->
+            <p class="text-muted mb-4">Sipariş Numaranız: <strong>#@ViewBag.OrderingId</strong></p>
+
+            <!-- Butonlar -->
+            <a href="/Default/Index/" class="btn btn-primary btn-lg mx-2">Anasayfaya Dön</a>
+
+            <!-- Sosyal Medya -->
+            <div class="mt-4">
+                <p>Bizi takip edin:</p>
+                <a href="https://facebook.com" class="mx-2 text-decoration-none">
+                    <i class="fab fa-facebook-square fa-2x" style="color: #1877F2;"></i>
+                </a>
+                <a href="https://instagram.com" class="mx-2 text-decoration-none">
+                    <i class="fab fa-instagram fa-2x" style="color: #C13584;"></i>
+                </a>
+                <a href="https://twitter.com" class="mx-2 text-decoration-none">
+                    <i class="fab fa-twitter-square fa-2x" style="color: #1DA1F2;"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

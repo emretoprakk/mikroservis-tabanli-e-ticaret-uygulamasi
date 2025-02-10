@@ -1,0 +1,11 @@
+Identity: 5001
+catalog: 7071
+discount: 7072
+order: 7073
+cargo: 7074
+basket: 7075
+comment: 7076
+payment: 7077
+images: 7078
+message: 7079
+signalr: 7080

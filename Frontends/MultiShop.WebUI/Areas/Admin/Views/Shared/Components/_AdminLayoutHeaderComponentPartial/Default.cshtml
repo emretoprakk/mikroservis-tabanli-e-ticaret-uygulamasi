@@ -1,0 +1,223 @@
+﻿<header class="main-header dark-bg">
+    <style>
+        .notify {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            display: inline-block;
+            font-size: 12px;
+            color: white;
+            background-color: #ff5e57; /* Kırmızı arka plan */
+            padding: 2px 6px;
+            border-radius: 50%; /* Yuvarlak tasarım */
+            font-weight: bold;
+        }
+
+        .dropdown-toggle {
+            position: relative; /* Notify elemanını ikonun üzerine yerleştir */
+        }
+
+        .notifications-menu .dropdown-menu {
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .notifications-menu .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid #f4f4f4;
+        }
+
+            .comment-item:last-child {
+                border-bottom: none;
+            }
+
+        .comment-left img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .comment-right {
+            flex: 1;
+        }
+
+            .comment-right h4 {
+                margin: 0;
+                font-size: 14px;
+                font-weight: bold;
+                color: #333;
+            }
+
+        .comment-text {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+
+            .comment-meta span {
+                display: flex;
+                align-items: center;
+            }
+
+            .comment-meta i {
+                margin-right: 5px;
+                color: #666;
+            }
+
+        .notifications-menu .footer {
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid #f4f4f4;
+        }
+
+            .notifications-menu .footer a {
+                color: #007bff;
+                text-decoration: none;
+            }
+    </style>
+    <!-- Logo -->
+    <a href="../index.html" class="logo dark-bg">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img src="~/images/logos/uygulamalogo.png" style="width:50px; height:50px;" alt="MultiShop"></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img src="~/images/logos/uygulamalogo.png" style="width:200px; height:50px;" alt="MultiShop"></span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"> <span class="sr-only">Toggle navigation</span> </a>
+        <div class="pull-left search-box">
+            <form action="#" method="get" class="search-form">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Aranacak kelimeyi giriniz...">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i> </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="dropdown messages-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-envelope"></i>
+                        <span class="notify">@ViewBag.messageCount</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">You have 4 messages</li>
+                        <li>
+                            <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                        <div class="pull-left"><img src="../dist/img/img1.jpg" class="img-circle" alt="User Image"></div>
+                                        <h4>Florence Douglas</h4>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p><small><i class="fa fa-clock-o"></i> 2 mins</small></p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="pull-left"><img src="../dist/img/img2.jpg" class="img-circle" alt="User Image"></div>
+                                        <h4>Douglas Smith</h4>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p><small><i class="fa fa-clock-o"></i> 15 mins</small></p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="pull-left"><img src="../dist/img/img3.jpg" class="img-circle" alt="User Image"></div>
+                                        <h4>Lorence Deo</h4>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p><small><i class="fa fa-clock-o"></i> 35 mins</small></p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="pull-left"><img src="../dist/img/img1.jpg" class="img-circle" alt="User Image"></div>
+                                        <h4>Florence Douglas</h4>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p><small><i class="fa fa-clock-o"></i> 2 mins</small></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="#">Check all notifications</a></li>
+                    </ul>
+                </li>
+                <!-- messages-menu -->
+                <!-- Notifications Menu -->
+                <li class="dropdown notifications-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-megaphone"></i>
+                        <span class="notify">@ViewBag.totalCommentCount</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">Son Yorumlar</li>
+                        <li>
+                            <ul class="menu">
+                                @foreach (var comment in ViewBag.recentComments as List<ResultCommentDto>)
+                                {
+                                    <li class="comment-item">
+                                        <a href="/Admin/Comment/UpdateComment/@comment.UserCommentId">
+                                            <div class="comment-left">
+                                                <img src="@comment.ImageUrl" alt="User Image">
+                                            </div>
+                                            <div class="comment-right">
+                                                <h4>@comment.FullName</h4>
+                                                <p class="comment-text">@comment.CommentDetail.Substring(0, Math.Min(30, comment.CommentDetail.Length))...</p>
+                                                <div class="comment-meta">
+                                                    <span class="comment-date"><i class="fa fa-clock-o"></i> @comment.CreatedDate.ToShortDateString()</span>
+                                                    <span class="comment-rating"><i class="fa fa-star"></i> @comment.Rating</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="/Admin/Comment/Index">Tüm Yorumları Görüntüle</a></li>
+                    </ul>
+                </li>
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="~/images/logos/manlogo.jpg" class="user-image" alt="User Image"> <span class="hidden-xs">Emre Toprak</span> </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-header">
+                            <div class="pull-left user-img"><img src="~/images/logos/manlogo.jpg" class="img-responsive" alt="User"></div>
+                            <p class="text-left">Emre Toprak <small>emretoprak@gmail.com</small> </p>
+                            <div class="view-link text-left"><a href="#">Profili Görüntüle</a> </div>
+                        </li>
+                        <li><a href="#"><i class="icon-profile-male"></i> Profilim</a></li>
+                        <li><a href="#"><i class="icon-wallet"></i> Bakiyem</a></li>
+                        <li><a href="#"><i class="icon-envelope"></i> Gelen Kutusu</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#"><i class="icon-gears"></i> Hesap Ayarları</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#"><i class="fa fa-power-off"></i> Çıkış Yap</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

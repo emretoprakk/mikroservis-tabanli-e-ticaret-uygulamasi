@@ -1,0 +1,43 @@
+﻿@model CreateProductImageDto
+
+@{
+    ViewData["Title"] = "CreateProductImage";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h3>Ürün Görseli Ekle</h3>
+                <form method="post" asp-action="CreateProductImage" asp-route-productId="@Model.ProductId">
+                    <input type="hidden" asp-for="ProductId" />
+
+                    <div class="form-group">
+                        <label for="Image1">Görsel 1 URL</label>
+                        <input type="text" class="form-control" id="Image1" asp-for="Image1" placeholder="Görsel 1 için URL girin" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Image2">Görsel 2 URL</label>
+                        <input type="text" class="form-control" id="Image2" asp-for="Image2" placeholder="Görsel 2 için URL girin" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Image3">Görsel 3 URL</label>
+                        <input type="text" class="form-control" id="Image3" asp-for="Image3" placeholder="Görsel 3 için URL girin" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Image4">Görsel 4 URL</label>
+                        <input type="text" class="form-control" id="Image4" asp-for="Image4" placeholder="Görsel 4 için URL girin" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Görselleri Kaydet</button>
+                    <a href="/Admin/Product/Index" class="btn btn-secondary">Geri Dön</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
