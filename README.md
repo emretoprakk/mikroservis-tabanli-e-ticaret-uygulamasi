@@ -24,7 +24,7 @@ Bu proje, **ASP.NET Core** ile geliştirilen **mikroservis mimarisine** sahip bi
 
 | Teknoloji          | Açıklama |
 |--------------------|----------|
-| **ASP.NET Core**  | Backend geliştirme |
+| **ASP.NET Core**  | Full Stack Geliştirme |
 | **Entity Framework Core** | ORM (Veritabanı yönetimi) |
 | **Dapper** | Hafif ORM alternatifi |
 | **Ocelot API Gateway** | Mikroservislerin yönetilmesi |
@@ -74,7 +74,7 @@ Bu proje, **ASP.NET Core** ile geliştirilen **mikroservis mimarisine** sahip bi
 
 ## 📸 Proje Görselleri
 
-### Giriş Ekranı
+### 🔑 Giriş Ekranı
 ![1](https://github.com/user-attachments/assets/404d541a-98c2-41c1-bcfb-750bd1f64bb8)
 
 ### 🏠 Ana Sayfa
